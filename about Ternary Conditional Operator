@@ -1,0 +1,28 @@
+最近看bbr相关的代码，tcp_rate_check_app_limited函数中计算tp->app_limited为：
+	tp->app_limited =
+			(tp->delivered + tcp_packets_in_flight(tp)) ? : 1;
+      
+   这个三目运算符中间表达式为空，通过简单测试发现返回的是第一个表达式的值。
+   
+   
+   查看gcc相关解释如下：
+   Conditionals with Omitted Operands
+
+The middle operand in a conditional expression may be omitted. Then if the first operand is nonzero,
+its value is the value of the conditional expression.
+
+Therefore, the expression
+
+     x ? : y
+     
+has the value of x if that is nonzero; otherwise, the value of y.
+
+This example is perfectly equivalent to
+
+     x ? x : y
+     
+In this simple case, the ability to omit the middle operand is not especially useful. When it becomes useful is when the first operand does, or may (if it is a macro argument), contain a side effect. Then repeating the operand in the middle would perform the side effect twice. Omitting the middle operand uses the value already
+computed without the undesirable effects of recomputing it.
+
+
+很明白了。
