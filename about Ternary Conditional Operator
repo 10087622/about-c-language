@@ -26,3 +26,7 @@ computed without the undesirable effects of recomputing it.
 
 
 很明白了。
+
+另外，关于side effect：
+side effect是关于计算（Evaluation）表达式的效应之一。譬如 int i; 计算 i = 3 这个表达式会得到一个值3，但同时变量i也被赋值了，这赋值的效应就是side effect。不是所有计算都有副效应，例如 计算2+3 得到值5，但没有side effect。
+side effect的标准定义是：Accessing a volatile object, modifying an object, modifying a file, or calling a function that does any of those operations are all side effects，which are changes in the state of the execution environment.
